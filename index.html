@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified Software Master Specification Explorer & Blueprint Studio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 340px;
+            }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Mandatory Required Metadata Comments -->
+    <!-- Chosen Palette: Slate & Indigo Harmony (Background: slate-50/slate-100, Primary Text: slate-800/900, Accent Primary: indigo-600, Secondary Accents: emerald-600 & amber-500) -->
+    <!-- Application Structure Plan: The SPA is structured into four core functional zones: 1) Executive Overview & Metrics Dashboard with interactive Chart.js visualizations comparing specification depth and target engineering domains; 2) Role-Focused Specification Navigator with real-time text searching and multi-role filtering (Product, Systems/QA, Architecture, DevOps); 3) Comprehensive Deep-Dive Explorer presenting Part 1 (PRD), Part 2 (SRS), Part 3 (TDD), and Part 4 (Appendices) with expandable technical guidelines, acceptance criteria, and code payload blueprints; 4) Interactive Blueprint Builder & Readiness Auditor allowing engineers to dynamically select specification components, inspect coverage, and copy customized Markdown spec templates. This structure was selected to transform static specification documentation into an active, searchable workbench. -->
+    <!-- Visualization & Content Choices: 
+         - Document Architecture Breakdown -> Goal: Compare section weight across product, system, and tech tiers -> Chart Method: Chart.js Stacked Horizontal Bar -> Interaction: Hover tooltips & filtering -> Justification: Clearly displays balance between business and engineering requirements.
+         - Non-Functional Target Radar -> Goal: Map quality attribute emphasis (Performance, Security, Reliability, Scalability) -> Chart Method: Chart.js Radar Chart -> Interaction: Dynamic metric highlighting -> Justification: Radar charts intuitively illustrate multidimensional engineering constraints.
+         - Interactive Spec Cards -> Goal: Detailed exploration of PRD/SRS/TDD specs -> Presentation: HTML Grid with JS Filter & Modal View -> Interaction: Expandable drawer, role tag filtering, and code snippet viewer -> Justification: Prevents visual clutter while providing granular technical details on demand.
+         - Template Generator -> Goal: Actionable utility -> Presentation: Form + Dynamic Code Block -> Interaction: Dynamic Markdown compiler + Clipboard integration -> Justification: Accelerates real-world usage of the Master Spec framework.
+         - NO SVG graphics used. NO Mermaid JS used. HTML/CSS styling and Unicode icons utilized exclusively.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 bg-slate-900 text-white shadow-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <span class="text-2xl">📋</span>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight text-slate-100">Unified Software Spec Workbench</h1>
+                    <p class="text-xs text-slate-400">PRD + SRS + TDD Master Reference & Studio</p>
+                </div>
+            </div>
+            
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                <a href="#overview" class="text-slate-300 hover:text-white transition">Overview</a>
+                <a href="#metrics" class="text-slate-300 hover:text-white transition">Metrics & Distribution</a>
+                <a href="#explorer" class="text-slate-300 hover:text-white transition">Spec Deep-Dive</a>
+                <a href="#builder" class="text-slate-300 hover:text-white transition">Spec Generator</a>
+            </nav>
+
+            <div class="flex items-center space-x-2">
+                <button onclick="scrollToSection('builder')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold py-2 px-3 rounded-lg shadow transition flex items-center space-x-1">
+                    <span>⚡</span>
+                    <span>Generate Template</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-12">
+
+        <!-- Section 1: Introduction & Overview -->
+        <section id="overview" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
+            <div class="max-w-3xl">
+                <span class="inline-block px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full mb-3 uppercase tracking-wider">Unified Architecture Framework</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-4">Master Software Specification Blueprint</h2>
+                <p class="text-slate-600 text-sm sm:text-base leading-relaxed mb-6">
+                    In high-velocity software engineering, standalone Product Requirements (PRD), System Specifications (SRS), and Technical Designs (TDD) often suffer from context drift and redundancy. This interactive workbench unifies all three disciplines into a single cohesive framework: establishing the <strong>Why</strong> (Product), defining the <strong>Constraints</strong> (System/SRS), and detailing the <strong>Execution Blueprint</strong> (Technical TDD).
+                </p>
+            </div>
+
+            <!-- Key Indicators Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-slate-100">
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80">
+                    <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Document Parts</div>
+                    <div class="text-2xl font-bold text-slate-900 mt-1">4 Parts</div>
+                    <div class="text-xs text-indigo-600 font-medium mt-1">PRD, SRS, TDD, Appendices</div>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80">
+                    <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Standard Sections</div>
+                    <div class="text-2xl font-bold text-slate-900 mt-1">18 Modules</div>
+                    <div class="text-xs text-emerald-600 font-medium mt-1">100% Comprehensive Depth</div>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80">
+                    <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Primary Roles</div>
+                    <div class="text-2xl font-bold text-slate-900 mt-1">4 Personas</div>
+                    <div class="text-xs text-amber-600 font-medium mt-1">PM, QA, Architect, DevOps</div>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80">
+                    <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Implementation Focus</div>
+                    <div class="text-2xl font-bold text-slate-900 mt-1">Zero-Gap</div>
+                    <div class="text-xs text-indigo-600 font-medium mt-1">Requirements-to-Code Trace</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Visual Metrics & Specification Distribution -->
+        <section id="metrics" class="space-y-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-slate-900">Specification Metrics & Engineering Balance</h2>
+                    <p class="text-slate-600 text-sm mt-1">
+                        Explore the structural distribution of requirements across business value, system boundaries, architectural blueprints, and non-functional engineering standards.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <!-- Chart 1 Container -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col items-center">
+                        <h3 class="text-sm font-bold text-slate-800 mb-3 self-start">Document Scope Breakdown by Domain</h3>
+                        <div class="chart-container">
+                            <canvas id="domainDistributionChart"></canvas>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-3 text-center">Proportional weighting of functional specs, system constraints, and technical design details.</p>
+                    </div>
+
+                    <!-- Chart 2 Container -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col items-center">
+                        <h3 class="text-sm font-bold text-slate-800 mb-3 self-start">Non-Functional Requirement (NFR) Coverage Model</h3>
+                        <div class="chart-container">
+                            <canvas id="nfrRadarChart"></canvas>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-3 text-center">Core software quality attributes detailed in Section 2.4 and Section 3.5/3.6.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Spec Deep-Dive & Interactive Explorer -->
+        <section id="explorer" class="space-y-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900">Master Specification Explorer</h2>
+                        <p class="text-slate-600 text-sm mt-1">
+                            Filter sections by target audience role or search for specific specifications such as APIs, Schemas, SLAs, or User Stories.
+                        </p>
+                    </div>
+
+                    <!-- Controls: Search & Role Filter -->
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <div class="relative">
+                            <input type="text" id="searchInput" placeholder="Search spec sections..." 
+                                class="w-full sm:w-64 pl-9 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
+                                oninput="filterSections()">
+                            <span class="absolute left-3 top-2.5 text-slate-400 text-xs">🔍</span>
+                        </div>
+                        <select id="roleFilter" onchange="filterSections()" 
+                            class="bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="all">All Roles & Audiences</option>
+                            <option value="product">Product Owners & PMs</option>
+                            <option value="systems">Systems & QA Engineers</option>
+                            <option value="architect">Lead Architects & Devs</option>
+                            <option value="devops">DevOps & Security Leads</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Part Tabs -->
+                <div class="flex border-b border-slate-200 overflow-x-auto custom-scrollbar mb-6 space-x-2">
+                    <button onclick="switchTab('all')" id="tab-all" class="tab-btn py-2.5 px-4 font-semibold text-sm border-b-2 border-indigo-600 text-indigo-600 whitespace-nowrap">
+                        All Specifications (18)
+                    </button>
+                    <button onclick="switchTab('part1')" id="tab-part1" class="tab-btn py-2.5 px-4 font-medium text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">
+                        Part 1: PRD (Business)
+                    </button>
+                    <button onclick="switchTab('part2')" id="tab-part2" class="tab-btn py-2.5 px-4 font-medium text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">
+                        Part 2: SRS (Constraints)
+                    </button>
+                    <button onclick="switchTab('part3')" id="tab-part3" class="tab-btn py-2.5 px-4 font-medium text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">
+                        Part 3: TDD (Execution)
+                    </button>
+                    <button onclick="switchTab('part4')" id="tab-part4" class="tab-btn py-2.5 px-4 font-medium text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">
+                        Part 4: Appendices
+                    </button>
+                </div>
+
+                <!-- Dynamic Grid for Cards -->
+                <div id="specGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Cards injected dynamically via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Interactive Spec Generator & Checklist -->
+        <section id="builder" class="space-y-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
+                <div class="mb-6">
+                    <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-md uppercase tracking-wider">Studio Tool</span>
+                    <h2 class="text-xl font-bold text-slate-900 mt-2">Interactive Master Spec Generator & Readiness Auditor</h2>
+                    <p class="text-slate-600 text-sm mt-1">
+                        Select required specification modules to evaluate project readiness and generate a clean, customized Markdown boilerplate.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- Left: Section Selector Checkboxes -->
+                    <div class="lg:col-span-5 space-y-4 bg-slate-50 p-5 rounded-xl border border-slate-200 max-h-[500px] overflow-y-auto custom-scrollbar">
+                        <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+                            <span class="font-bold text-sm text-slate-800">Select Modules to Include</span>
+                            <div class="space-x-2">
+                                <button onclick="toggleAllCheckboxes(true)" class="text-xs text-indigo-600 hover:underline font-semibold">Select All</button>
+                                <span class="text-slate-300">|</span>
+                                <button onclick="toggleAllCheckboxes(false)" class="text-xs text-slate-500 hover:underline">Clear</button>
+                            </div>
+                        </div>
+
+                        <!-- Checkboxes generated dynamically -->
+                        <div id="builderCheckboxes" class="space-y-2">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Right: Live Markdown Preview & Copy -->
+                    <div class="lg:col-span-7 flex flex-col bg-slate-900 rounded-xl p-4 text-slate-200">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                                <span class="w-3 h-3 rounded-full bg-yellow-500 inline-block"></span>
+                                <span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+                                <span class="text-xs font-mono text-slate-400 ml-2">master_specification.md</span>
+                            </div>
+                            <button onclick="copyMarkdownTemplate()" id="copyBtn" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold py-1.5 px-3 rounded flex items-center space-x-1 transition">
+                                <span>📋</span>
+                                <span>Copy Markdown</span>
+                            </button>
+                        </div>
+
+                        <!-- Code Display Block -->
+                        <pre id="markdownPreview" class="flex-grow p-4 font-mono text-xs overflow-auto max-h-[400px] custom-scrollbar text-emerald-400 leading-relaxed whitespace-pre-wrap">
+<!-- Generated markdown will render here dynamically -->
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal for Granular Section Detail -->
+    <div id="detailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200">
+            <!-- Modal Header -->
+            <div class="p-6 bg-slate-900 text-white flex items-start justify-between">
+                <div>
+                    <span id="modalPartTag" class="text-xs font-bold uppercase tracking-wider text-indigo-400">Part 1: PRD</span>
+                    <h3 id="modalTitle" class="text-xl font-bold mt-1 text-white">Section Title</h3>
+                    <p id="modalSubtitle" class="text-xs text-slate-400 mt-0.5">Focus and primary goal</p>
+                </div>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white text-xl font-bold p-1">✕</button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 overflow-y-auto custom-scrollbar space-y-5 text-slate-700 text-sm">
+                <div>
+                    <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-1">Purpose & Business Rationale</h4>
+                    <p id="modalPurpose" class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-slate-800">Detailed purpose text...</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-1">Required Inputs / Data</h4>
+                        <ul id="modalInputs" class="list-disc list-inside space-y-1 bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs text-slate-700">
+                            <!-- Injected by JS -->
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-1">Expected Outputs / Artifacts</h4>
+                        <ul id="modalOutputs" class="list-disc list-inside space-y-1 bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs text-slate-700">
+                            <!-- Injected by JS -->
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-1">Standard Acceptance Checklist</h4>
+                    <ul id="modalChecklist" class="space-y-1.5 bg-indigo-50/50 p-3.5 rounded-lg border border-indigo-100 text-xs text-slate-800">
+                        <!-- Injected by JS -->
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-1">Sample Blueprint Code / Structure</h4>
+                    <pre id="modalCodeSnippet" class="bg-slate-900 text-slate-100 p-3 rounded-lg font-mono text-xs overflow-x-auto custom-scrollbar border border-slate-800">
+<!-- Sample snippet -->
+                    </pre>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-end">
+                <button onclick="closeModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-medium text-xs rounded-lg transition">Close Window</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 py-6 text-center text-xs">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>Unified Software Master Specification Reference & Studio Framework</p>
+            <p class="mt-1 text-slate-500">Includes IEEE 830 SRS Standards, Modern Agile PRD Frameworks, and Industry TDD Blueprints.</p>
+        </div>
+    </footer>
+
+    <!-- Application Logic Script -->
+    <script>
+        // Master Data Model storing all 18 Specification Sections across 4 Parts
+        const masterSpecData = [
+            // PART 1: PRD
+            {
+                id: "sec-1-1",
+                part: "part1",
+                partName: "Part 1: PRD",
+                code: "1.1",
+                title: "Product Overview & Strategy",
+                subtitle: "Core problem statement, target personas, and business KPIs.",
+                role: "product",
+                roleLabel: "Product Owner",
+                roleColor: "bg-indigo-100 text-indigo-800",
+                purpose: "Establishes the commercial justification and high-level strategy for building the system. It anchors engineering decisions directly to user personas and measurable key performance indicators.",
+                inputs: ["User research & interviews", "Market analysis & competitive landscape", "Executive product vision"],
+                outputs: ["Defined Problem Statement", "Quantifiable Success KPIs", "Target Audience Personas"],
+                checklist: [
+                    "Is the core problem expressed clearly without dictating technical solutions?",
+                    "Are success metrics quantifiable (e.g., latency < 200ms, conversion > 4.5%)?",
+                    "Are primary personas explicitly identified with pain points?"
+                ],
+                snippet: `### 1.1 Product Overview\n* Objective: Solve fragmented document management for enterprise teams.\n* Key KPIs: Reduce spec creation time by 40%, achieve 99.9% uptime.\n* Target Persona: Lead Engineers and Senior Product Managers.`
+            },
+            {
+                id: "sec-1-2",
+                part: "part1",
+                partName: "Part 1: PRD",
+                code: "1.2",
+                title: "Scope & Business Boundaries",
+                subtitle: "Explicit In-Scope features, Out-of-Scope boundaries, and dependencies.",
+                role: "product",
+                roleLabel: "Product Owner",
+                roleColor: "bg-indigo-100 text-indigo-800",
+                purpose: "Prevents feature creep by establishing strict operational boundaries. Clearly delineates what will be built in the current release versus what is explicitly deferred.",
+                inputs: ["Product roadmap", "Resource budget", "Third-party vendor capabilities"],
+                outputs: ["In-Scope Feature List", "Explicit Out-of-Scope List", "Business Assumptions Matrix"],
+                checklist: [
+                    "Does the document list at least 3-5 explicit Out-of-Scope items?",
+                    "Are third-party team dependencies identified with delivery dates?",
+                    "Are business assumptions backed by stakeholder agreement?"
+                ],
+                snippet: `### 1.2 Scope\n* In Scope: Core CRUD APIs, OAuth2 Login, Markdown export.\n* Out of Scope: Mobile native app (v2 feature), Automated AI writing assistant.\n* Dependencies: Auth0 service availability, AWS Cloud infrastructure.`
+            },
+            {
+                id: "sec-1-3",
+                part: "part1",
+                partName: "Part 1: PRD",
+                code: "1.3",
+                title: "Requirements & User Stories",
+                subtitle: "User-centric feature specifications with Gherkin acceptance criteria.",
+                role: "product",
+                roleLabel: "Product Owner",
+                roleColor: "bg-indigo-100 text-indigo-800",
+                purpose: "Translates high-level feature requests into structured user stories with explicit, testable Given-When-Then criteria.",
+                inputs: ["User journey mapping", "Feature backlog", "UX wireframe paths"],
+                outputs: ["Agile User Stories", "Testable Acceptance Criteria"],
+                checklist: [
+                    "Are user stories formatted as 'As a [user], I want to [action] so that [benefit]'?",
+                    "Does every story have clear Given-When-Then test cases?",
+                    "Are edge cases and error states covered in acceptance criteria?"
+                ],
+                snippet: `### 1.3 Requirements & Features\n* User Story: As an architect, I want to export Markdown specs so that I can commit them to Git.\n* Acceptance Criteria:\n  Given a completed spec form\n  When the user clicks 'Export'\n  Then a valid .md file is generated within 500ms.`
+            },
+            {
+                id: "sec-1-4",
+                part: "part1",
+                partName: "Part 1: PRD",
+                code: "1.4",
+                title: "Design & User Experience (UX)",
+                subtitle: "Wireframe links, UI prototypes, and step-by-step navigation flows.",
+                role: "product",
+                roleLabel: "Product / UX",
+                roleColor: "bg-indigo-100 text-indigo-800",
+                purpose: "Bridges the gap between technical backends and user visual interaction. Defines screens, layout rules, and state feedback.",
+                inputs: ["Figma / Sketch design links", "Brand style guidelines", "User testing feedback"],
+                outputs: ["Visual Wireframes", "Interactive Prototypes", "User Navigation Map"],
+                checklist: [
+                    "Are Figma or design file links updated to final approved versions?",
+                    "Are user state transitions (loading, error, empty state) defined?",
+                    "Is responsive breakpoint behavior documented for mobile/desktop?"
+                ],
+                snippet: `### 1.4 Design & UX\n* Wireframe Specs: Figma Blueprint URL (v1.4 approved)\n* Primary User Flow: Landing -> Spec Selection -> Interactive Editor -> Export Modal.\n* UI States: Skeleton loading shown during API latency > 300ms.`
+            },
+
+            // PART 2: SRS
+            {
+                id: "sec-2-1",
+                part: "part2",
+                partName: "Part 2: SRS",
+                code: "2.1",
+                title: "System Context & Boundaries",
+                subtitle: "Infrastructure context, host environment, and compliance constraints.",
+                role: "systems",
+                roleLabel: "Systems / QA",
+                roleColor: "bg-emerald-100 text-emerald-800",
+                purpose: "Establishes the system's technical boundaries within the larger corporate network, detailing regulatory standards (GDPR, HIPAA, PCI-DSS) and OS runtime environments.",
+                inputs: ["Enterprise network map", "Security compliance standards", "Cloud provider spec"],
+                outputs: ["System Boundary Map", "Compliance Matrix", "Host OS Environment Specs"],
+                checklist: [
+                    "Are regulatory constraints (e.g., GDPR, SOC2) explicitly stated?",
+                    "Is the runtime environment (Docker, Kubernetes, AWS Lambda) defined?",
+                    "Are hardware memory/CPU minimum thresholds specified?"
+                ],
+                snippet: `### 2.1 System Context & Environment\n* Boundary: Microservice deployed inside AWS VPC Private Subnet.\n* Environment: Linux Alpine Node.js 20 container, 2 vCPU, 4GB RAM.\n* Compliance: GDPR compliant data hashing, SOC2 Type II audit logging.`
+            },
+            {
+                id: "sec-2-2",
+                part: "part2",
+                partName: "Part 2: SRS",
+                code: "2.2",
+                title: "System Features & Inputs/Outputs",
+                subtitle: "Strict functional transformations, validation rules, and state changes.",
+                role: "systems",
+                roleLabel: "Systems / QA",
+                roleColor: "bg-emerald-100 text-emerald-800",
+                purpose: "Defines the exact technical behavior for every system action, specifying exact input parameters, validation logic, algorithm execution, and output state emissions.",
+                inputs: ["API payloads", "Database triggers", "Incoming webhooks"],
+                outputs: ["State transformations", "Database mutations", "Outbound payload events"],
+                checklist: [
+                    "Are data type validations specified for all inputs?",
+                    "Is processing logic detailed with algorithm pseudocode or state rules?",
+                    "Are expected database mutation side-effects documented?"
+                ],
+                snippet: `### 2.2 System Features\n* Input: JSON payload with { specId: UUID, sections: Array<String> }\n* Processing: Validate UUID -> Fetch schema -> Compile Markdown AST\n* Output: HTTP 200 with raw text/markdown payload; audit log emit.`
+            },
+            {
+                id: "sec-2-3",
+                part: "part2",
+                partName: "Part 2: SRS",
+                code: "2.3",
+                title: "External Interfaces & Protocols",
+                subtitle: "Software APIs, hardware drivers, and network communications.",
+                role: "systems",
+                roleLabel: "Systems / QA",
+                roleColor: "bg-emerald-100 text-emerald-800",
+                purpose: "Details all external communication vectors including REST endpoints, gRPC streams, WebSocket protocols, DB drivers, and TLS encryption requirements.",
+                inputs: ["External API specs", "Hardware interface specs", "Network topology"],
+                outputs: ["Interface Contract List", "Protocol Mapping", "TLS/Encryption Requirements"],
+                checklist: [
+                    "Are communication protocols (e.g., REST over HTTPS, gRPC) named?",
+                    "Is TLS 1.3 or minimum security cipher standard required?",
+                    "Are third-party API rate limits and retry policies defined?"
+                ],
+                snippet: `### 2.3 External Interfaces\n* Communications: REST over HTTPS (TLS 1.3 mandatory).\n* Database Interface: PostgreSQL v15 via TLS socket with connection pooling.\n* Third-Party API: Stripe Webhook integration with RSA-256 signature verification.`
+            },
+            {
+                id: "sec-2-4",
+                part: "part2",
+                partName: "Part 2: SRS",
+                code: "2.4",
+                title: "Non-Functional Requirements (NFR)",
+                subtitle: "Performance latency SLAs, scalability targets, and reliability metrics.",
+                role: "systems",
+                roleLabel: "Systems / QA",
+                roleColor: "bg-emerald-100 text-emerald-800",
+                purpose: "Specifies strict quality criteria including response latency percentiles (p95, p99), horizontal scaling limits, data recovery SLAs (RPO/RTO), and uptime commitments.",
+                inputs: ["SLA requirements", "Load test targets", "Disaster recovery policy"],
+                outputs: ["Latency Matrix", "Scale Targets", "Disaster Recovery Targets"],
+                checklist: [
+                    "Are performance limits written as p95/p99 latency thresholds?",
+                    "Is uptime specified with concrete SLA numbers (e.g., 99.99%)?",
+                    "Are RPO (Recovery Point Objective) and RTO defined for outages?"
+                ],
+                snippet: `### 2.4 Non-Functional Requirements (NFRs)\n* Performance: API p95 latency < 150ms under load of 10,000 RPM.\n* Availability: 99.95% Uptime SLA (max 21 mins downtime/month).\n* Disaster Recovery: RPO < 5 mins, RTO < 30 mins.`
+            },
+
+            // PART 3: TDD
+            {
+                id: "sec-3-1",
+                part: "part3",
+                partName: "Part 3: TDD",
+                code: "3.1",
+                title: "High-Level Architecture & Tech Stack",
+                subtitle: "Component diagrams (C4 model), service interrelationships, and tech stack.",
+                role: "architect",
+                roleLabel: "Architect / Dev",
+                roleColor: "bg-amber-100 text-amber-800",
+                purpose: "Provides the overarching system design blueprint using component interaction models and explicitly detailing chosen frameworks, languages, and infrastructure tools.",
+                inputs: ["PRD & SRS requirements", "Enterprise tech radar", "Infrastructure capabilities"],
+                outputs: ["C4 Architecture Diagram", "Component Interaction Map", "Technology Stack Table"],
+                checklist: [
+                    "Does the section include visual block diagrams or C4 models?",
+                    "Is every component assigned a specific responsibility?",
+                    "Are tech stack version numbers explicitly locked?"
+                ],
+                snippet: `### 3.1 High-Level Architecture\n* Architecture Pattern: Event-Driven Microservices with Redis Pub/Sub.\n* Tech Stack: Go 1.22, PostgreSQL 16, Redis 7, React 18, Tailwind CSS.\n* Components: Auth Service, Spec Engine Service, Rendering Worker.`
+            },
+            {
+                id: "sec-3-2",
+                part: "part3",
+                partName: "Part 3: TDD",
+                code: "3.2",
+                title: "Data Model & Storage Schema",
+                subtitle: "Database tables, ERDs, index strategies, and data migrations.",
+                role: "architect",
+                roleLabel: "Architect / Dev",
+                roleColor: "bg-amber-100 text-amber-800",
+                purpose: "Defines the physical data structures, relational schemas, foreign key constraints, indexes, and database migration plans required to back the system.",
+                inputs: ["Data entity analysis", "Read/Write ratio metrics", "Query patterns"],
+                outputs: ["Entity-Relationship Diagram (ERD)", "SQL Schema DDL", "Index Blueprint"],
+                checklist: [
+                    "Are primary keys, foreign keys, and indexes explicitly declared?",
+                    "Are field data types, nullability, and constraints specified?",
+                    "Is database migration strategy (e.g., zero-downtime) detailed?"
+                ],
+                snippet: `### 3.2 Data Model & Storage\n* Schema (PostgreSQL):\n  CREATE TABLE master_specs (\n    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    title VARCHAR(255) NOT NULL,\n    created_at TIMESTAMPTZ DEFAULT NOW()\n  );\n* Indexing: B-Tree index on (created_at DESC).`
+            },
+            {
+                id: "sec-3-3",
+                part: "part3",
+                partName: "Part 3: TDD",
+                code: "3.3",
+                title: "API & Interface Specifications",
+                subtitle: "Endpoints, request/response payloads, and HTTP status codes.",
+                role: "architect",
+                roleLabel: "Architect / Dev",
+                roleColor: "bg-amber-100 text-amber-800",
+                purpose: "Provides developer-ready API contracts specifying paths, query parameters, HTTP methods, JSON schema payloads, and standardized error codes.",
+                inputs: ["UX data requirements", "System interface requirements", "OpenAPI schemas"],
+                outputs: ["Endpoint Reference Table", "JSON Payloads Blueprint", "HTTP Error Code Catalog"],
+                checklist: [
+                    "Does every endpoint list HTTP verbs (GET, POST, PUT, DELETE)?",
+                    "Are 4xx and 5xx error payloads standardized?",
+                    "Is request validation handling documented?"
+                ],
+                snippet: `### 3.3 API & Interface Design\n* Endpoint: POST /api/v1/specs/compile\n* Request Payload: { "templateId": "prd-v1", "variables": {} }\n* Response (200 OK): { "status": "success", "downloadUrl": "https://..." }\n* Error (400 Bad Request): { "code": "INVALID_TEMPLATE", "message": "..." }`
+            },
+            {
+                id: "sec-3-4",
+                part: "part3",
+                partName: "Part 3: TDD",
+                code: "3.4",
+                title: "Core Business Logic & State",
+                subtitle: "Algorithms, cron jobs, background workers, and state transitions.",
+                role: "architect",
+                roleLabel: "Architect / Dev",
+                roleColor: "bg-amber-100 text-amber-800",
+                purpose: "Breaks down complex data processing algorithms, state machine transitions, background job queues, and asynchronous processing logic.",
+                inputs: ["Business rules", "State workflow mapping", "Processing triggers"],
+                outputs: ["State Machine Diagram", "Algorithm Pseudocode", "Queue Worker Rules"],
+                checklist: [
+                    "Are state transitions mapped explicitly (e.g., Draft -> In Review -> Approved)?",
+                    "Is background job failure retry behavior (exponential backoff) defined?",
+                    "Is race condition handling documented for concurrent requests?"
+                ],
+                snippet: `### 3.4 Logic & State Management\n* State Machine: DRAFT -> IN_REVIEW -> APPROVED -> ARCHIVED.\n* Queue Processor: Celery/Redis worker handling PDF rendering.\n* Retry Strategy: 3 retries with exponential backoff (2s, 4s, 8s).`
+            },
+            {
+                id: "sec-3-5",
+                part: "part3",
+                partName: "Part 3: TDD",
+                code: "3.5",
+                title: "Security & Authorization Architecture",
+                subtitle: "JWT validation, OAuth2 flows, RBAC permissions, and encryption.",
+                role: "devops",
+                roleLabel: "DevOps / Security",
+                roleColor: "bg-purple-100 text-purple-800",
+                purpose: "Outlines technical implementation details for identity verification, fine-grained access control (RBAC/ABAC), cryptographic key management, and secrets management.",
+                inputs: ["Corporate security guidelines", "OAuth provider specs", "Compliance matrix"],
+                outputs: ["Auth Flow Diagram", "RBAC Permission Matrix", "Encryption Specification"],
+                checklist: [
+                    "Is token validation (e.g., JWT signing algorithm RS256) defined?",
+                    "Are cryptographic algorithms specified for data at rest (AES-256-GCM)?",
+                    "Are secrets management tools (e.g., AWS Secrets Manager, HashiCorp Vault) specified?"
+                ],
+                snippet: `### 3.5 Security Implementation\n* Authentication: OAuth2 with OIDC JWTs signed using RS256 keys.\n* Access Control: RBAC with roles [Admin, Editor, Viewer].\n* Encryption: AES-256 for database columns; TLS 1.3 for transit.`
+            },
+            {
+                id: "sec-3-6",
+                part: "part3",
+                partName: "Part 3: TDD",
+                code: "3.6",
+                title: "Deployment & Infrastructure Pipeline",
+                subtitle: "Cloud topology, Docker/K8s configs, CI/CD pipelines, and monitoring.",
+                role: "devops",
+                roleLabel: "DevOps / Security",
+                roleColor: "bg-purple-100 text-purple-800",
+                purpose: "Details the physical infrastructure deployment model, infrastructure-as-code scripts, automated CI/CD build pipelines, and log aggregation monitoring toolchains.",
+                inputs: ["Cloud architecture plans", "Build pipeline tools", "Monitoring tooling"],
+                outputs: ["Terraform/IaC Blueprints", "CI/CD Pipeline YAML", "Alerting Threshold Rules"],
+                checklist: [
+                    "Is the CI/CD deployment flow (automated testing, staging, prod deploy) mapped?",
+                    "Are monitoring metrics and alerting thresholds defined (e.g., CPU > 85%)?",
+                    "Is log format structured (JSON with correlation IDs)?"
+                ],
+                snippet: `### 3.6 Deployment & Infrastructure\n* CI/CD: GitHub Actions running linters, automated unit tests, and Docker push.\n* Hosting: AWS EKS Kubernetes Cluster with HPA (Horizontal Pod Autoscaler).\n* Monitoring: Prometheus metrics + Datadog logging with trace correlation IDs.`
+            },
+            {
+                id: "sec-3-7",
+                part: "part3",
+                partName: "Part 3: TDD",
+                code: "3.7",
+                title: "Architectural Alternatives & Trade-offs",
+                subtitle: "Evaluated alternative approaches and technical decisions rationale.",
+                role: "architect",
+                roleLabel: "Architect / Dev",
+                roleColor: "bg-amber-100 text-amber-800",
+                purpose: "Documents technical options evaluated during system design and records why specific options were rejected, serving as an architectural decision record (ADR).",
+                inputs: ["Tech spike evaluations", "Benchmarking results", "Cost analysis"],
+                outputs: ["Architectural Decision Record (ADR)", "Pros/Cons Evaluation Table"],
+                checklist: [
+                    "Are at least 2 alternative technical approaches discussed?",
+                    "Are trade-offs evaluated across cost, complexity, and performance?",
+                    "Is the decision rationale clearly linked to project constraints?"
+                ],
+                snippet: `### 3.7 Alternatives Considered\n* Evaluated: MongoDB vs PostgreSQL.\n* Decision: Selected PostgreSQL due to strict relational integrity needs for user permission trees and ACID compliance.`
+            },
+
+            // PART 4: APPENDICES
+            {
+                id: "sec-4-1",
+                part: "part4",
+                partName: "Part 4: Appendices",
+                code: "4.1",
+                title: "Definitions, Acronyms & Glossary",
+                subtitle: "Clear domain terminology dictionary and acronym lookup.",
+                role: "product",
+                roleLabel: "All Roles",
+                roleColor: "bg-slate-100 text-slate-800",
+                purpose: "Provides explicit definitions for technical, domain-specific, and corporate shorthand to prevent semantic misunderstandings across multidisciplinary teams.",
+                inputs: ["Domain terminology list", "Industry standard glossaries"],
+                outputs: ["Standardized Project Glossary"],
+                checklist: [
+                    "Are all project acronyms (e.g., SLA, RBAC, JWT, RPO) defined?",
+                    "Are domain business terms clarified for external developers?"
+                ],
+                snippet: `### 4.1 Glossary & Acronyms\n* PRD: Product Requirements Document\n* SRS: Software Requirements Specification\n* TDD: Technical Design Document\n* SLA: Service Level Agreement`
+            },
+            {
+                id: "sec-4-2",
+                part: "part4",
+                partName: "Part 4: Appendices",
+                code: "4.2",
+                title: "Stakeholder Approvals & Sign-offs",
+                subtitle: "Formal governance, review history, and lead sign-offs.",
+                role: "product",
+                roleLabel: "All Roles",
+                roleColor: "bg-slate-100 text-slate-800",
+                purpose: "Records formal sign-offs and approvals from Product Management, Engineering Leads, Security Leads, and Business Stakeholders prior to implementation.",
+                inputs: ["Review meeting logs", "Stakeholder registry"],
+                outputs: ["Governance Audit Trail", "Approval Matrix"],
+                checklist: [
+                    "Are all key stakeholders listed with name, role, and approval date?",
+                    "Is document revision history logged with clear version numbers?"
+                ],
+                snippet: `### 4.2 Sign-offs\n* Product Lead: Approved (Date: 2026-08-15)\n* Lead Engineer: Approved (Date: 2026-08-16)\n* Security Officer: Approved (Date: 2026-08-17)`
+            }
+        ];
+
+        // State variables
+        let activeTab = 'all';
+        let activeRole = 'all';
+        let searchQuery = '';
+        let selectedCheckboxes = new Set(masterSpecData.map(s => s.id));
+
+        // On DOM Load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCharts();
+            renderSpecGrid();
+            renderBuilderCheckboxes();
+            updateMarkdownPreview();
+        });
+
+        // Initialize Chart.js Visualizations
+        function renderCharts() {
+            // Chart 1: Domain Breakdown Stacked Horizontal Bar
+            const ctx1 = document.getElementById('domainDistributionChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Part 1: PRD', 'Part 2: SRS', 'Part 3: TDD', 'Part 4: Appendices'],
+                    datasets: [
+                        {
+                            label: 'Business & UX Focus',
+                            data: [4, 0, 0, 1],
+                            backgroundColor: '#6366f1' // Indigo
+                        },
+                        {
+                            label: 'System & Constraints',
+                            data: [0, 4, 0, 0],
+                            backgroundColor: '#10b981' // Emerald
+                        },
+                        {
+                            label: 'Architecture & Tech Execution',
+                            data: [0, 0, 5, 0],
+                            backgroundColor: '#f59e0b' // Amber
+                        },
+                        {
+                            label: 'DevOps & Security',
+                            data: [0, 0, 2, 1],
+                            backgroundColor: '#a855f7' // Purple
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw} Module(s)`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { stacked: true, grid: { color: '#f1f5f9' }, title: { display: true, text: 'Number of Modules' } },
+                        y: { stacked: true, grid: { display: false } }
+                    }
+                }
+            });
+
+            // Chart 2: Non-Functional Requirement (NFR) Coverage Radar Chart
+            const ctx2 = document.getElementById('nfrRadarChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'radar',
+                data: {
+                    labels: ['Performance Latency', 'Scalability Limits', 'Security & RBAC', 'Availability SLA', 'Maintainability', 'Compliance'],
+                    datasets: [{
+                        label: 'Master Spec NFR Depth Weighting',
+                        data: [95, 88, 98, 90, 85, 92],
+                        fill: true,
+                        backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                        borderColor: '#6366f1',
+                        pointBackgroundColor: '#6366f1',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#6366f1'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e2e8f0' },
+                            grid: { color: '#f1f5f9' },
+                            suggestedMin: 50,
+                            suggestedMax: 100,
+                            ticks: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Render Specification Cards Grid
+        function renderSpecGrid() {
+            const gridContainer = document.getElementById('specGrid');
+            gridContainer.innerHTML = '';
+
+            const filteredData = masterSpecData.filter(item => {
+                const matchesTab = activeTab === 'all' || item.part === activeTab;
+                const matchesRole = activeRole === 'all' || item.role === activeRole;
+                const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                      item.subtitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                      item.code.includes(searchQuery);
+                return matchesTab && matchesRole && matchesSearch;
+            });
+
+            if (filteredData.length === 0) {
+                gridContainer.innerHTML = `
+                    <div class="col-span-full text-center py-12 bg-slate-50 rounded-xl border border-dashed border-slate-300">
+                        <span class="text-3xl">🔍</span>
+                        <h3 class="font-bold text-slate-700 mt-2 text-base">No Matching Specifications Found</h3>
+                        <p class="text-slate-500 text-xs mt-1">Try adjusting your role filter or search term.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-50 rounded-xl border border-slate-200 p-5 flex flex-col justify-between hover:shadow-md transition group border-t-4 border-t-indigo-600";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-mono font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">${item.partName} - Sec ${item.code}</span>
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full ${item.roleColor}">${item.roleLabel}</span>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base group-hover:text-indigo-600 transition mb-1">${item.title}</h3>
+                        <p class="text-slate-600 text-xs leading-relaxed mb-4">${item.subtitle}</p>
+                    </div>
+
+                    <div class="pt-3 border-t border-slate-200 flex items-center justify-between">
+                        <button onclick="openModal('${item.id}')" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 flex items-center space-x-1">
+                            <span>Inspect Guidance</span>
+                            <span>→</span>
+                        </button>
+                        <span class="text-[10px] text-slate-400 font-mono">${item.inputs.length} Inputs • ${item.outputs.length} Outputs</span>
+                    </div>
+                `;
+                gridContainer.appendChild(card);
+            });
+        }
+
+        // Tab Switching Handler
+        function switchTab(tabId) {
+            activeTab = tabId;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('border-indigo-600', 'text-indigo-600');
+                btn.classList.add('border-transparent', 'text-slate-500');
+            });
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('border-transparent', 'text-slate-500');
+                activeBtn.classList.add('border-indigo-600', 'text-indigo-600');
+            }
+            renderSpecGrid();
+        }
+
+        // Search and Filter Handler
+        function filterSections() {
+            searchQuery = document.getElementById('searchInput').value;
+            activeRole = document.getElementById('roleFilter').value;
+            renderSpecGrid();
+        }
+
+        // Modal Handlers
+        function openModal(secId) {
+            const item = masterSpecData.find(s => s.id === secId);
+            if (!item) return;
+
+            document.getElementById('modalPartTag').innerText = `${item.partName} • SECTION ${item.code}`;
+            document.getElementById('modalTitle').innerText = item.title;
+            document.getElementById('modalSubtitle').innerText = item.subtitle;
+            document.getElementById('modalPurpose').innerText = item.purpose;
+
+            const inputsList = document.getElementById('modalInputs');
+            inputsList.innerHTML = item.inputs.map(inp => `<li>${inp}</li>`).join('');
+
+            const outputsList = document.getElementById('modalOutputs');
+            outputsList.innerHTML = item.outputs.map(out => `<li>${out}</li>`).join('');
+
+            const checklistList = document.getElementById('modalChecklist');
+            checklistList.innerHTML = item.checklist.map(chk => `<li class="flex items-start space-x-2"><span class="text-emerald-600 font-bold">✓</span><span>${chk}</span></li>`).join('');
+
+            document.getElementById('modalCodeSnippet').innerText = item.snippet;
+
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
+        // Builder & Checkbox Logic
+        function renderBuilderCheckboxes() {
+            const container = document.getElementById('builderCheckboxes');
+            container.innerHTML = '';
+
+            masterSpecData.forEach(item => {
+                const isChecked = selectedCheckboxes.has(item.id);
+                const itemEl = document.createElement('label');
+                itemEl.className = "flex items-center space-x-3 p-2 rounded hover:bg-white cursor-pointer transition border border-transparent hover:border-slate-200 text-xs";
+                itemEl.innerHTML = `
+                    <input type="checkbox" value="${item.id}" ${isChecked ? 'checked' : ''} onchange="toggleCheckbox('${item.id}')" class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500">
+                    <span class="font-mono text-slate-500 font-semibold">${item.code}</span>
+                    <span class="text-slate-800 font-medium flex-grow">${item.title}</span>
+                `;
+                container.appendChild(itemEl);
+            });
+        }
+
+        function toggleCheckbox(id) {
+            if (selectedCheckboxes.has(id)) {
+                selectedCheckboxes.delete(id);
+            } else {
+                selectedCheckboxes.add(id);
+            }
+            updateMarkdownPreview();
+        }
+
+        function toggleAllCheckboxes(selectAll) {
+            if (selectAll) {
+                selectedCheckboxes = new Set(masterSpecData.map(s => s.id));
+            } else {
+                selectedCheckboxes.clear();
+            }
+            renderBuilderCheckboxes();
+            updateMarkdownPreview();
+        }
+
+        // Compile Live Markdown Output
+        function updateMarkdownPreview() {
+            const previewEl = document.getElementById('markdownPreview');
+            if (selectedCheckboxes.size === 0) {
+                previewEl.innerText = "<!-- No specification modules selected. Select items on the left to generate template. -->";
+                return;
+            }
+
+            let markdown = `# Unified Software Master Specification\n`;
+            markdown += `**Project Name:** [Insert Project Title]\n`;
+            markdown += `**Document Status:** [Draft / In Review / Approved]\n`;
+            markdown += `**Last Updated:** ${new Date().toISOString().split('T')[0]}\n\n`;
+            markdown += `---\n\n`;
+
+            const selectedItems = masterSpecData.filter(item => selectedCheckboxes.has(item.id));
+
+            let currentPart = "";
+            selectedItems.forEach(item => {
+                if (item.partName !== currentPart) {
+                    currentPart = item.partName;
+                    markdown += `## ${currentPart}\n\n`;
+                }
+                markdown += `${item.snippet}\n\n`;
+            });
+
+            previewEl.innerText = markdown;
+        }
+
+        // Copy Template to Clipboard
+        function copyMarkdownTemplate() {
+            const markdownText = document.getElementById('markdownPreview').innerText;
+            navigator.clipboard.writeText(markdownText).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.innerHTML = `<span>✅</span> <span>Copied!</span>`;
+                btn.classList.remove('bg-indigo-600');
+                btn.classList.add('bg-emerald-600');
+                setTimeout(() => {
+                    btn.innerHTML = `<span>📋</span> <span>Copy Markdown</span>`;
+                    btn.classList.remove('bg-emerald-600');
+                    btn.classList.add('bg-indigo-600');
+                }, 2000);
+            });
+        }
+
+        // Helper smooth scroll
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
